@@ -9,11 +9,11 @@
     <form id="loginForm">
         <fieldset>
             <div>
-                Username
+                username
                 <input name="username" type="text" required=""/>
             </div>
             <div>
-                Password
+                password
                 <input name="password" type="text" required=""/>
             </div>
             <div>
@@ -24,9 +24,11 @@
     
 </body>
 <script>
-    document.getElementById('loginForm').addEventListener('submit',async(e)=>{
+  /*  document.getElementById('loginForm').addEventListener('submit',async(e)=>{
         e.preventDefault();
         const formData = new FormData(e.target)
+        //console.log('Username:',username)
+        console.log(formData)
         try{
             const response = await fetch('/login',{
                 method : 'POST',
@@ -41,6 +43,38 @@
         }catch(error){
             console.error('Error during Submission',error)
         }
-    })
+    })*/
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();  // Prevent form from refreshing the page
+
+        const formData = new FormData(e.target);
+
+        const username = formData.get('username');
+        const password = formData.get('password');
+        console.log('Username:', username);
+        console.log('Password:', password);
+
+        try {
+            // Making a POST request to /login with the form data
+             const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'  // Set proper content-type for JSON data
+                },
+                body: JSON.stringify({ username, password })  // Send as JSON string
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                 window.location.href = 'home.html'
+                console.log('Login successful:', result);
+            } else {
+                console.log("Login failed:", response.statusText);
+            }
+        } catch (error) {
+            console.error('Error during submission:', error);
+        }
+    });
+
 </script>
 </html>

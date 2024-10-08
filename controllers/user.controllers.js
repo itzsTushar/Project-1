@@ -88,25 +88,35 @@ const loginUser=asyncHandler(async(req,res)=>{
     console.log("password : ",password)
     const CHECK_USER = `select user_id from users where username = '${username}'`
     const user_id = await connection.execute(CHECK_USER)
+    console.log(user_id.rows[0])
     if(user_id.rows.length==0){
         throw new ApiError(404,'wrong Username')
     }
-   const CHECK_PASSWORD = `select password from users where user_id = ${user_id}`
-   const passcode = connection.execute(CHECK_PASSWORD)
-   if(passcode == password){
-    const user_email = `select email from users where user_id = ${user_id}`
-    const email = connection.execute(user_email)
-    const accessToken = generateAccessToken(user_id,username,email)
-    const fetch_refreshToken = `select refresh_token from users where user_id = ${user_id}`
-    const refreshToken = connection.execute(fetch_refreshToken)
-    const insertString = `insert into loginuser values(${user_id},'${accessToken}','${refreshToken}')`
+   const CHECK_PASSWORD = `select password from users where user_id = ${user_id.rows[0]}`
+   const passcode = await connection.execute(CHECK_PASSWORD)
+   console.log(passcode.rows[0])
+   if(passcode.rows[0] == password){
+    const user_email = `select email from users where user_id = ${user_id.rows[0]}`
+    const email = await connection.execute(user_email)
+    const accessToken = generateAccessToken(user_id.rows[0],username,email.rows[0])
+    const fetch_refreshToken = `select refresh_token from users where user_id = ${user_id.rows[0]}`
+    const refreshToken = await connection.execute(fetch_refreshToken)
+    const insertString = `insert into loginuser values(${user_id.rows[0]},'${accessToken}','${refreshToken}')`
     await connection.execute(insertString)
+    await connection.commit()
+    const option = {
+        httpOnly : true,
+        secure:true
+    }
     res.status(200).cookie(accessToken,option).cookie(refreshToken,option).json(
          new ApiResponse(200,{
             user_id
          },"User Logged in succesfully")
     )
     
+   }
+   else{
+    throw new ApiError(404,"Password is incorrect")
    }
 
    }catch(err){
