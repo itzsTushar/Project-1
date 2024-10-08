@@ -1,0 +1,30 @@
+{
+  "name": "orphang",
+  "version": "1.0.0",
+  "description": "Child Adoption System",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon -r dotenv/config --experimental-json-modules index.js"
+  },
+  "keywords": [
+    "home",
+    "sweet",
+    "home"
+  ],
+  "author": "Tushar Sharma",
+  "license": "ISC",
+  "dependencies": {
+    "cloudinary": "^2.5.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "oracledb": "^6.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
