@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+<body>
+    <form id="loginForm">
+        <fieldset>
+            <div>
+                Username
+                <input name="username" type="text" required=""/>
+            </div>
+            <div>
+                Password
+                <input name="password" type="text" required=""/>
+            </div>
+            <div>
+                <button type="submit">log in</button>
+            </div>
+        </fieldset>
+    </form>
+    
+</body>
+<script>
+    document.getElementById('loginForm').addEventListener('submit',async(e)=>{
+        e.preventDefault();
+        const formData = new FormData(e.target)
+        try{
+            const response = await fetch('/login',{
+                method : 'POST',
+                body : formData
+            })
+            if(response.ok){
+                const result = await response.json();
+                console.log('ok :',result)
+            }else{
+                console.log("Failed : ",response.statusText)
+            }
+        }catch(error){
+            console.error('Error during Submission',error)
+        }
+    })
+</script>
+</html>

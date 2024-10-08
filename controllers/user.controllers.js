@@ -3,10 +3,9 @@ import {ApiError} from "../utilis/apierror.js"
 import { uploadonCloudinary } from "../utilis/cloudnary.js"
 import {ApiResponse} from"../utilis/apiresponse.js"
 import {connectDatabase} from "../backend/database.js"
-import { generateRefreshToken } from "../utilis/jwt.js"
-
+import { generateRefreshToken,generateAccessToken } from "../utilis/jwt.js"
+const connection = await connectDatabase()
 const registerUser = asyncHandler(async(req,res)=>{
-    const connection = await connectDatabase()
     const {username,email,phno,password} = req.body
     let avatar_path
     if(req.files && Array.isArray(req.files.avatar)&& req.files.avatar.length>0){
@@ -82,4 +81,38 @@ const registerUser = asyncHandler(async(req,res)=>{
         new ApiResponse(200,{username,email},'User Register Succesfully')
     )
 })
-export {registerUser}
+const loginUser=asyncHandler(async(req,res)=>{
+   try{
+    const {username,password} = req.body
+    console.log("USername: ",username)
+    console.log("password : ",password)
+    const CHECK_USER = `select user_id from users where username = '${username}'`
+    const user_id = await connection.execute(CHECK_USER)
+    if(user_id.rows.length==0){
+        throw new ApiError(404,'wrong Username')
+    }
+   const CHECK_PASSWORD = `select password from users where user_id = ${user_id}`
+   const passcode = connection.execute(CHECK_PASSWORD)
+   if(passcode == password){
+    const user_email = `select email from users where user_id = ${user_id}`
+    const email = connection.execute(user_email)
+    const accessToken = generateAccessToken(user_id,username,email)
+    const fetch_refreshToken = `select refresh_token from users where user_id = ${user_id}`
+    const refreshToken = connection.execute(fetch_refreshToken)
+    const insertString = `insert into loginuser values(${user_id},'${accessToken}','${refreshToken}')`
+    await connection.execute(insertString)
+    res.status(200).cookie(accessToken,option).cookie(refreshToken,option).json(
+         new ApiResponse(200,{
+            user_id
+         },"User Logged in succesfully")
+    )
+    
+   }
+
+   }catch(err){
+    console.log(err)
+    throw new ApiError(401,"something Went wrong")
+   }
+
+})
+export {registerUser,loginUser}
