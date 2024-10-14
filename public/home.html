@@ -4,8 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HomePage</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom Animation for Slideshow */
+        @keyframes slide {
+            0%, 12% { transform: translateX(0%); }      /* Show first image */
+            33%, 45% { transform: translateX(-100%); }  /* Show second image */
+            66%, 78% { transform: translateX(-200%); }  /* Show third image */
+            100% { transform: translateX(0%); }         /* Loop back to first image */
+        }
+
+        /* Carousel wrapper with full width, and fixed height */
+        .carousel {
+            overflow: hidden;
+            width: 100%;
+            height: 200px; /* Fixed height */
+        }
+
+        /* The images will slide left every 4 seconds */
+        .carousel-images {
+            display: flex;
+            width: 300%; /* 3 images, each covering full width */
+            animation: slide 12s infinite; /* Each cycle (3 images) takes 12 seconds */
+        }
+
+        /* Ensure each image is full width and fixed height */
+        .carousel-images img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
 </head>
-<body>
-    
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto flex justify-between items-center px-6">
+            <!-- Website Name -->
+            <div class="text-lg font-bold">Website Name</div>
+
+            <!-- Header Options -->
+            <div class="flex space-x-6">
+                <a href="account.html" class="text-gray-700 hover:text-blue-500">Account</a>
+                <a href="#" class="text-gray-700 hover:text-blue-500">Cart</a>
+                <input type="text" placeholder="Search..." class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+        </div>
+    </header>
+
+    <!-- Carousel (Sliding Images) -->
+
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-4 mt-12">
+        <div class="container mx-auto text-center">
+
+            <!-- Agency Button -->
+            <button class="bg-white text-black text-sm py-2 px-4 rounded-lg mb-4 hover:bg-gray-200">
+                Agency Button
+            </button>
+
+            <!-- About Us Section -->
+            <div class="mb-6">
+                <p class="text-lg font-semibold">About Us</p>
+                <p class="text-sm">We are a trusted organization helping connect children with loving families. Our agency has been serving communities for over a decade, providing support, education, and resources for both adoptive parents and children. Our mission is to give every child a home full of care, love, and happiness.</p>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="mb-6">
+                <p class="text-lg font-semibold">Contact Us</p>
+                <p class="text-sm">Phone: (123) 456-7890 | Email: info@agency.com</p>
+            </div>
+
+            <!-- Agency Address -->
+            <div class="mb-6">
+                <p class="text-sm">1234 Street Address, City, Country</p>
+                <p class="text-sm mt-4">© 2024 Agency Name. All rights reserved.</p>
+            </div>
+
+        </div>
+    </footer>
+
 </body>
+<script>
+
+</script>
 </html>

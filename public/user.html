@@ -1,39 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USER REGISTER</title>
-    <style>
-
-    </style>
-</head>
-<body>
-    <form id="registerForm">
-        <fieldset>
-            <div>
-                username
-                <input name="username" type="text" required="">
-            </div>
-            <div>
-                email<input name="email" type="email" required=""> 
-            </div>
-            <div>
-                password<input name="password" type="text" required="">
-            </div>
-            <div>
-                phno<input name="phno" type="text" required="">
-            </div>
-            <div>
-                avatar<input name="avatar" type="file" >
-            </div>
-            <div>
-                <button type="submit" >Submit</button>
-            </div>
-        </fieldset>
-
-    </form>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>USER REGISTER</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <style>
+            /* Add your background image here */
+            body {
+                background-image: url('https://res.cloudinary.com/dyi0do0cg/image/upload/v1728452368/kg5gvegqqaoduh4ubmhu.webp'); /* Replace with your actual image path */
+                background-size: cover;
+                background-position: center;
+            }
+        </style>
+    </head>
+    <body class="flex justify-center items-center min-h-screen">
+    
+        <form id="registerForm" class="bg-blue-300 bg-opacity-80 p-8 rounded-lg shadow-lg w-full max-w-md">
+            <fieldset>
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-700 font-semibold mb-2">Username</label>
+                    <input name="username" type="text" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input name="email" type="email" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
+                    <input name="password" type="password" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="mb-4">
+                    <label for="phno" class="block text-gray-700 font-semibold mb-2">Phone Number</label>
+                    <input name="phno" type="text" required class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="mb-4">
+                    <label for="avatar" class="block text-gray-700 font-semibold mb-2">Avatar</label>
+                    <input name="avatar" type="file" class="w-full p-2 border border-gray-300 rounded">
+                </div>
+                <div class="flex justify-center">
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+    
+    </body>
 <script>
     document.getElementById('registerForm').addEventListener('submit',async(e)=>{
         e.preventDefault();

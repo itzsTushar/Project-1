@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Details</title>
+</head>
+<body>
+    <div class="account-details">
+        <img id="profile-image" class="profile-image" src="" alt="Profile Image" />
+        <div id="name" class="details"></div>
+        <div id="phone" class="details"></div>
+        <div id="email"></div>
+    </div>
+</body>
+<script>
+    // Function to fetch account details
+    async function getAccountDetails() {
+        try {
+            // Fetch the account details with the Authorization token
+            const token = document.cookie.split('; ').find(row => row.startsWith('AccessToken')).split('=')[1]; // Assumes the token is in cookies
+            console.log(token)
+            const response = await fetch(`/account`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // Send the token in the Authorization header
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to fetch account details");
+            }
+    
+            const data = await response.json();
+    
+            // Update HTML with the fetched data
+            document.getElementById('name').textContent = `Name: ${data.username}`;
+            document.getElementById('phone').textContent = `Phone: ${data.phno}`;
+            document.getElementById('profile-image').src = data.avatar; // Assuming avatar is img_url
+    
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    
+
+    // Fetch and display account details when the page loads
+    window.onload = getAccountDetails;
+</script>
+</html>

@@ -3,7 +3,7 @@ import {ApiError} from "../utilis/apierror.js"
 import { uploadonCloudinary } from "../utilis/cloudnary.js"
 import {ApiResponse} from"../utilis/apiresponse.js"
 import {connectDatabase} from "../backend/database.js"
-import { generateRefreshToken,generateAccessToken } from "../utilis/jwt.js"
+import { generateRefreshToken,generateAccessToken,decodeToken} from "../utilis/jwt.js"
 const connection = await connectDatabase()
 const registerUser = asyncHandler(async(req,res)=>{
     const {username,email,phno,password} = req.body
@@ -125,4 +125,20 @@ const loginUser=asyncHandler(async(req,res)=>{
    }
 
 })
-export {registerUser,loginUser}
+const getAccountDetail = asyncHandler(async(req,res)=>{
+    const cookie = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer ", "")
+    console.log(cookie)
+    const decoded_token = decodeToken(cookie)
+    const id =decoded_token._id
+    console.log(id)
+    const updateString = `select user_id,username,email,phno,avatar from users where user_id = ${id}` 
+    const result = await connection.execute(updateString)
+    if(result.rows.length == 0){
+        throw new ApiError(401,"unauthorised request")
+    }
+    const  {user_id,username,email,phno,avatar} = result.rows[0]
+    res.status(200).json(
+        new ApiResponse(200, {user_id,username,email,phno,avatar},"details of the user")
+    )
+})
+export {registerUser,loginUser,getAccountDetail}

@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+import { ApiError } from "./apierror.js"
 const generateRefreshToken = function(id,username,email){
     try{
         return jwt.sign({
@@ -30,7 +31,20 @@ const generateAccessToken = function(user_id,username,email){
         console.log("Something Went wrong",err)
     }
 }
+const decodeToken = function(token){
+    try{
+        if(!token){
+            throw new ApiError(401,"Unauthorised request")
+        }
+        const decode_token = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+        return decode_token
+    }
+    catch(err){
+        console.error(err)
+    }
+}
 export{
     generateRefreshToken,
-    generateAccessToken
+    generateAccessToken,
+    decodeToken
 }
