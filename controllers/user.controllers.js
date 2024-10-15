@@ -101,11 +101,11 @@ const loginUser=asyncHandler(async(req,res)=>{
     const accessToken = generateAccessToken(user_id.rows[0],username,email.rows[0])
     const fetch_refreshToken = `select refresh_token from users where user_id = ${user_id.rows[0]}`
     const refreshToken = await connection.execute(fetch_refreshToken)
-    const insertString = `insert into loginuser values(${user_id.rows[0]},'${accessToken}','${refreshToken}')`
+    const insertString = `insert into loginuser values(${user_id.rows[0]},'${accessToken}','${refreshToken.rows[0]}')`
     await connection.execute(insertString)
     await connection.commit()
     const option = {
-        httpOnly : true,
+        httpOnly:true,
         secure:true
     }
     res.status(200).cookie(accessToken,option).cookie(refreshToken,option).json(
@@ -126,7 +126,8 @@ const loginUser=asyncHandler(async(req,res)=>{
 
 })
 const getAccountDetail = asyncHandler(async(req,res)=>{
-    const cookie = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer ", "")
+    //const cookie = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer ", "")
+    const cookie = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOlsyM10sInVzZXJuYW1lIjoic2hhcm1hdHVzaGFyIiwiZW1haWwiOlsia3M2MDY0MTMzQGdtYWlsLmNvbSJdLCJpYXQiOjE3Mjg5Nzc2NjMsImV4cCI6MTcyOTA2NDA2M30.fBAYhzGJREuF3ky_iQ1I755irxJYJRRBIuP8e3j7zHQ'
     console.log(cookie)
     const decoded_token = decodeToken(cookie)
     const id =decoded_token._id
@@ -136,9 +137,11 @@ const getAccountDetail = asyncHandler(async(req,res)=>{
     if(result.rows.length == 0){
         throw new ApiError(401,"unauthorised request")
     }
-    const  {user_id,username,email,phno,avatar} = result.rows[0]
+   const  details = result.rows[0]
+    //console.log(result.rows[0])
+    //console.log(user_id,username)
     res.status(200).json(
-        new ApiResponse(200, {user_id,username,email,phno,avatar},"details of the user")
+        new ApiResponse(200, {details},"details of the user")
     )
 })
 export {registerUser,loginUser,getAccountDetail}
