@@ -6,37 +6,10 @@
     <title>HomePage</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Custom Animation for Slideshow */
-        @keyframes slide {
-            0%, 12% { transform: translateX(0%); }      /* Show first image */
-            33%, 45% { transform: translateX(-100%); }  /* Show second image */
-            66%, 78% { transform: translateX(-200%); }  /* Show third image */
-            100% { transform: translateX(0%); }         /* Loop back to first image */
-        }
 
-        /* Carousel wrapper with full width, and fixed height */
-        .carousel {
-            overflow: hidden;
-            width: 100%;
-            height: 200px; /* Fixed height */
-        }
-
-        /* The images will slide left every 4 seconds */
-        .carousel-images {
-            display: flex;
-            width: 300%; /* 3 images, each covering full width */
-            animation: slide 12s infinite; /* Each cycle (3 images) takes 12 seconds */
-        }
-
-        /* Ensure each image is full width and fixed height */
-        .carousel-images img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="flex flex-col min-h-screen bg-gray-100">
 
     <!-- Header -->
     <header class="bg-white shadow-md py-4">
@@ -53,16 +26,42 @@
         </div>
     </header>
 
-    <!-- Carousel (Sliding Images) -->
-
+    <!-- Main content to push footer down -->
+    <main class="flex-grow">
+        <!-- Your content goes here, like the carousel or other sections -->
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem animi ducimus totam asperiores tenetur quam sequi earum, officiis repellat molestiae repellendus. Fugit aspernatur iusto expedita sed sunt reiciendis nesciunt tempora!</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum nisi libero ex ipsa repellendus, eum atque officiis sapiente animi ullam eos laborum unde porro, minima magni soluta ratione facere praesentium!</p>
+       
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-black text-white py-4 mt-12">
+    <footer class="bg-black text-white py-5 mt-auto">
         <div class="container mx-auto text-center">
 
             <!-- Agency Button -->
             <button class="bg-white text-black text-sm py-2 px-4 rounded-lg mb-4 hover:bg-gray-200">
                 Agency Button
+            </button>
+            <button class="bg-white text-black text-sm py-2 px-4 rounded-lg mb-4 hover:bg-gray-200" onclick="window.location.href='agency.html'">
+                Create Agency
             </button>
 
             <!-- About Us Section -->
@@ -87,7 +86,4 @@
     </footer>
 
 </body>
-<script>
-
-</script>
 </html>

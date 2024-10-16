@@ -108,7 +108,7 @@ const loginUser=asyncHandler(async(req,res)=>{
         httpOnly:true,
         secure:true
     }
-    res.status(200).cookie(accessToken,option).cookie(refreshToken,option).json(
+    res.status(200).cookie("AccessToken",accessToken,option).cookie("RefreshToken",refreshToken,option).json(
          new ApiResponse(200,{
             user_id
          },"User Logged in succesfully")
@@ -126,8 +126,8 @@ const loginUser=asyncHandler(async(req,res)=>{
 
 })
 const getAccountDetail = asyncHandler(async(req,res)=>{
-    //const cookie = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer ", "")
-    const cookie = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOlsyM10sInVzZXJuYW1lIjoic2hhcm1hdHVzaGFyIiwiZW1haWwiOlsia3M2MDY0MTMzQGdtYWlsLmNvbSJdLCJpYXQiOjE3Mjg5Nzc2NjMsImV4cCI6MTcyOTA2NDA2M30.fBAYhzGJREuF3ky_iQ1I755irxJYJRRBIuP8e3j7zHQ'
+    const cookie = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer ", "")
+    //const cookie = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOlsyM10sInVzZXJuYW1lIjoic2hhcm1hdHVzaGFyIiwiZW1haWwiOlsia3M2MDY0MTMzQGdtYWlsLmNvbSJdLCJpYXQiOjE3Mjg5Nzc2NjMsImV4cCI6MTcyOTA2NDA2M30.fBAYhzGJREuF3ky_iQ1I755irxJYJRRBIuP8e3j7zHQ'
     console.log(cookie)
     const decoded_token = decodeToken(cookie)
     const id =decoded_token._id
@@ -144,4 +144,25 @@ const getAccountDetail = asyncHandler(async(req,res)=>{
         new ApiResponse(200, {details},"details of the user")
     )
 })
-export {registerUser,loginUser,getAccountDetail}
+const logoutUser = asyncHandler(async(req,res)=>{
+ //fecth the cookie if not throw error 
+ //decode the id
+ // delte the user from login table
+ // clear the cookie res.clearcookie()
+ //commit the database
+ const token = req.cookies?.AccessToken || req.header("Authorization")?.replace("Bearer ","")
+ if(!token){
+    throw new ApiError(404,"Unauthorised")
+ }
+ console.log(token)
+ const decoded_token = decodeToken(token)
+ const id = decoded_token._id
+ const deleteString = `delete from loginusere where user_id = ${id}`
+ const result = await connection.execute(deleteString)
+ await result.commit()
+ res.status(200).clearCookie("AccessToken").clearCookie("Refreshtoken").json(
+    new ApiResponse(200,"USer logged out")
+ )
+})
+await connection.close()
+export {registerUser,loginUser,getAccountDetail,logoutUser}

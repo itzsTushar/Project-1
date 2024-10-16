@@ -11,49 +11,73 @@
         <div class="flex flex-col items-center">
             <!-- Profile Image -->
             <img id="profile-image" class="rounded-full w-48 h-48 object-cover mb-4" src="" alt="Profile Image" />
-
+    
             <!-- User Details -->
             <div class="text-left w-full">
                 <div id="name" class="text-lg font-semibold mb-2 text-gray-800"></div>
                 <div id="email" class="text-sm text-gray-600 mb-1"></div>
                 <div id="phone" class="text-sm text-gray-600 mb-4"></div>
             </div>
+    
+            <!-- Logout Button -->
+            <button id="logout-button" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg">
+                Logout
+            </button>
         </div>
-    </div>
-
-    <script>
-        // Fetch account details and update the DOM
-        async function getAccountDetails() {
-            try {
-                const token = document.cookie;
-                console.log(token);
-
-                const response = await fetch(`/account`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch account details");
-                }
-
-                const result = await response.json();
-                const data = result.data.details;
-
-                // Update HTML with the fetched data
-                document.getElementById('name').textContent = `Name: ${data[1]}`; // Username
-                document.getElementById('email').textContent = `Email: ${data[2]}`; // Email
-                document.getElementById('phone').textContent = `Phone: ${data[3]}`; // Phone
-                document.getElementById('profile-image').src = data[4]; // Profile image URL
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
-        // Fetch and display account details when the page loads
-        window.onload = getAccountDetails;
-    </script>
+    </div>    
 </body>
+<script>
+    // Fetch account details and update the DOM
+    async function getAccountDetails() {
+        try {
+            const token = document.cookie.split(';')[0];
+            console.log(token);
+
+            const response = await fetch(`/account`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch account details");
+            }
+
+            const result = await response.json();
+            const data = result.data.details;
+
+            // Update HTML with the fetched data
+            document.getElementById('name').textContent = `Username: ${data[1]}`; // Username
+            document.getElementById('email').textContent = `Email: ${data[2]}`; // Email
+            document.getElementById('phone').textContent = `Phone: ${data[3]}`; // Phone
+            document.getElementById('profile-image').src = data[4]; // Profile image URL
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    document.getElementById('logout-button').addEventListener('click', async () => {
+        try {
+            const token = document.cookie.split(';')[0];
+            console.log(token);
+            const response = await fetch('/account', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                window.location.href = '/index.html'; // Redirect to login page after logout
+            } else {
+                console.error("Logout failed");
+            }
+        } catch (error) {
+            console.error("Error during logout:", error);
+        }
+    });
+
+    // Fetch and display account details when the page loads
+    window.onload = getAccountDetails;
+</script>
 </html>

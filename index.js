@@ -26,6 +26,7 @@ connectDatabase()
   .catch((error) => {
     console.error('Connection error:', error);
   });
+
 /*
 async function run(){
     const connecteddb = await connectDatabase();
