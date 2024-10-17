@@ -108,7 +108,7 @@ const loginUser=asyncHandler(async(req,res)=>{
         httpOnly:true,
         secure:true
     }
-    res.status(200).cookie("AccessToken",accessToken,option).cookie("RefreshToken",refreshToken,option).json(
+    res.status(200).cookie("AccessToken",accessToken,option).cookie("RefreshToken",refreshToken.rows[0],option).json(
          new ApiResponse(200,{
             user_id
          },"User Logged in succesfully")
@@ -157,12 +157,12 @@ const logoutUser = asyncHandler(async(req,res)=>{
  console.log(token)
  const decoded_token = decodeToken(token)
  const id = decoded_token._id
- const deleteString = `delete from loginusere where user_id = ${id}`
+ const deleteString = `delete from loginuser where user_id = ${id}`
  const result = await connection.execute(deleteString)
- await result.commit()
+ await connection.commit()
  res.status(200).clearCookie("AccessToken").clearCookie("Refreshtoken").json(
     new ApiResponse(200,"USer logged out")
  )
 })
-await connection.close()
+//await connection.close()
 export {registerUser,loginUser,getAccountDetail,logoutUser}

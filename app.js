@@ -20,5 +20,7 @@ app.get('/', (req, res) => {
     res.sendFile(process.env.DIRNAME + '/public/index.html');
   });
 import router from "./routes/user.routes.js"
+import agencyRouter from "./routes/agency.routes.js"
 app.use('/',router)
+app.use('/agency',agencyRouter)
 export {app}
