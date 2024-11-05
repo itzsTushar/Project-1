@@ -63,6 +63,7 @@ try {
         console.log(id)
         const agencyString = `select *from adoption_agency where user_id=${id}`
         const result = await connection.execute(agencyString)
+        //console.log(result)
         if(result.rows.length == 0){
             throw new ApiError(404,'No agency found')
         }

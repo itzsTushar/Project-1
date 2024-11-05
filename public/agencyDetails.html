@@ -44,7 +44,6 @@
             <a id="wlink" class="text-blue-500 hover:underline" target="_blank">Website</a>
         </div>
     </div>
-
     <script>
         async function fetchAgencyDetails() {
             try {
@@ -71,84 +70,89 @@
                 console.error(err);
             }
         }
+        window.onload = fetchAgencyDetails;
 
        // Trigger file input click for cover image
-document.getElementById('changeCoverBtn').addEventListener('click', () => {
-    document.getElementById('uploadCoverInput').click();
-});
-
-// Ensure the file input element is defined before adding the event listener
-const uploadCoverInput = document.getElementById('uploadCoverInput');
-//console.log(uploadCoverInput)
-
-if (uploadCoverInput) {
-    // Handle file upload when a file is selected
-    uploadCoverInput.addEventListener('change', async (e) => {
-        const file = e.target.files ? e.target.files : null;  // Check if files array exists
-        console.log(file[0])
-
-        if (!file) {
-            console.log("No file selected");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('cimage', file[0]);  // Append the file to formData with the key 'cimage'
-        console.log(formData)
-
-        try {
-            const response = await fetch('/uploadCoverImage', {
-                method: 'POST',
-                body: formData,
-                credentials: 'include'
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                location.reload()
-                console.log("Image upload successful:", result);
-
-                // Update the cover image URL if upload is successful
-                //document.getElementById('cimage').src = result.data.url;
-            } else {
-                console.log("Something went wrong", response.statusText);
-            }
-        } catch (err) {
-            console.log("Error uploading image:", err);
-        }
+       document.getElementById('changeCoverBtn').addEventListener('click', () => {
+        document.getElementById('uploadCoverInput').click();
     });
-} else {
-    console.error("File input element with ID 'uploadCoverInput' not found.");
-}
-document.getElementById('chnageAvatarBtn').addEventListener('click',()=>{
-    document.getElementById('uploadAvatarInput').click()
-})
-document.getElementById('uploadAvatarInput').addEventListener('chnage',async(e)=>{
-     const file = e.target.files?e.target.files : null
-     if(!file){
-        console.log("No file selected")
-        return
-     }
-     const formData = new FormData()
-     formData.append('avatar',file[0])
-     try{
-        const response = await fetch('/uploadavatar',{
-            method :'POST',
-            body : formData,
-            credentials:'include'
-        })
-        if(response.ok){
-            const result = await response.json()
-            localtion.reload()
-            conosle.log("avatar successfully uploaded",result)
-        }else{
-            console.log("something went wrong :: ",response.statusText)
-        }
-     }catch(err){
-        console.log(err)
-     }
-})
-        window.onload = fetchAgencyDetails;
+
+    const uploadCoverInput = document.getElementById('uploadCoverInput');
+
+    if (uploadCoverInput) {
+        uploadCoverInput.addEventListener('change', async (e) => {
+            const file = e.target.files ? e.target.files : null;
+
+            if (!file) {
+                console.log("No file selected");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('cimage', file[0]);
+
+            try {
+                const response = await fetch('/uploadCoverImage', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    location.reload();
+                    console.log("Image upload successful:", result);
+                } else {
+                    console.log("Something went wrong", response.statusText);
+                }
+            } catch (err) {
+                console.log("Error uploading image:", err);
+            }
+        });
+    } else {
+        console.error("File input element with ID 'uploadCoverInput' not found.");
+    }
+
+    // Trigger file input click for avatar
+    document.getElementById('changeAvatarBtn').addEventListener('click', () => {
+        document.getElementById('uploadAvatarInput').click();
+    });
+
+    const uploadAvatarInput = document.getElementById('uploadAvatarInput');
+
+    if (uploadAvatarInput) {
+        uploadAvatarInput.addEventListener('change', async (e) => {
+            const file = e.target.files ? e.target.files : null;
+
+            if (!file) {
+                console.log("No file selected");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('avatar', file[0]);
+
+            try {
+                const response = await fetch('/uploadavatar', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    location.reload();
+                    console.log("Avatar successfully uploaded", result);
+                } else {
+                    console.log("Something went wrong:", response.statusText);
+                }
+            } catch (err) {
+                console.log("Error uploading avatar:", err);
+            }
+        });
+    } else {
+        console.error("File input element with ID 'uploadAvatarInput' not found.");
+    }
     </script>
 </body>
 </html>

@@ -57,6 +57,7 @@
             })
             if(response.ok){
                 const result = await response.json();
+                window.location.href='login.html'
                 console.log('User register successfully :',result)
             }else{
                 console.log("Failed to register User : ",response.statusText)
