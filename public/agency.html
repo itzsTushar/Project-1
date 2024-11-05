@@ -88,6 +88,7 @@
 
             if (response.ok) {
                 const result = await response.json();
+                window.location.href='agencyDetails.html'
                 console.log(result);
             } else {
                 console.log("Something went wrong");

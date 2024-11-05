@@ -21,6 +21,9 @@ app.get('/', (req, res) => {
   });
 import router from "./routes/user.routes.js"
 import agencyRouter from "./routes/agency.routes.js"
+/*app.get('/agency',(req,res)=>{
+    res.sendFile(process.env.DIRNAME+'/public/agencyDetails.html')
+})*/
 app.use('/',router)
-app.use('/agency',agencyRouter)
+app.use('/',agencyRouter)
 export {app}

@@ -31,6 +31,21 @@ const generateAccessToken = function(user_id,username,email){
         console.log("Something Went wrong",err)
     }
 }
+const generateAgencyToken = function(user_id,agencyName,licno){
+    try{
+        return jwt.sign({
+            _id:user_id,
+            agencyName:agencyName,
+            licno : licno
+            
+        },
+    process.env.AGENCY_TOKEN_SECRET,{
+        expiresIn:process.env.AGENCY_TOKEN_EXPIRY
+    })
+    }catch(err){
+        console.log("Error when generating agency token : ",err)
+    }
+}
 const decodeToken = function(token){
     try{
         if(!token){
@@ -43,8 +58,23 @@ const decodeToken = function(token){
         console.error(err)
     }
 }
+const decodeAgencyToken = function(token){
+    try{
+        if(!token){
+            throw new ApiError(401,"Unauthorised request")
+        }
+        const decode_token = jwt.verify(token,process.env.AGENCY_TOKEN_SECRET)
+        return decode_token
+    }
+    catch(err){
+        console.error(err)
+    }
+}
+
 export{
     generateRefreshToken,
     generateAccessToken,
-    decodeToken
+    generateAgencyToken,
+    decodeToken,
+    decodeAgencyToken
 }
