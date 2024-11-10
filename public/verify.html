@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md space-y-4 text-center">
+        
+        <!-- Email Input -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2">Email</label>
+            <input type="email" placeholder="Enter your email" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" id="emailInput">
+        </div>
+        
+        <!-- Get OTP Button -->
+        <button type="button" onclick="showOtpFields()" class="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700">
+            Get OTP
+        </button>
+        
+        <!-- OTP Section -->
+        <div id="otpSection" class="hidden space-y-4">
+            <!-- OTP Input -->
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">OTP</label>
+                <input type="text" placeholder="Enter OTP" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-700">
+                Submit
+            </button>
+            
+            <!-- Resend OTP Button -->
+            <button type="button" onclick="resendOtp()" class="w-full py-2 px-4 bg-yellow-500 text-white rounded hover:bg-yellow-700">
+                Resend OTP
+            </button>
+        </div>
+        
+    </div>
+
+    <script>
+        function showOtpFields() {
+            document.getElementById('otpSection').classList.remove('hidden');
+        }
+        
+        function resendOtp() {
+            alert('OTP has been resent');
+            // Logic to resend OTP can be added here
+        }
+    </script>
+</body>
+</html>
