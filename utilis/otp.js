@@ -43,6 +43,7 @@ const generateOtp = function() {
     return otp;
 };
 
-console.log("Otp:", generateOtp());
+//console.log("Otp:", generateOtp());
+
 
 export {generateOtp}

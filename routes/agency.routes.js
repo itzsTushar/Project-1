@@ -1,5 +1,7 @@
 import {Router} from 'express'
-import { addCoverImage, getAgencyDetials, showAgencyDetails,addavatar} from '../controllers/agency.controllers.js'
+import { addCoverImage, getAgencyDetials, showAgencyDetails,addavatar,
+    isagencyUser
+} from '../controllers/agency.controllers.js'
 import { upload } from '../middlerware/multer.middleware.js'
 const agencyRouter = Router()
 agencyRouter.route('/agency').post(getAgencyDetials)
@@ -16,4 +18,5 @@ agencyRouter.route('/uploadavatar').post(upload.fields([
         maxCount:1
     }
 ]),addavatar)
+agencyRouter.route('/agencyemailverification').post(isagencyUser)
 export default agencyRouter;

@@ -5,6 +5,8 @@ import {ApiResponse} from"../utilis/apiresponse.js"
 import {connectDatabase} from "../backend/database.js"
 import { generateAgencyToken,decodeToken,decodeAgencyToken } from "../utilis/jwt.js"
 import { decode } from "jsonwebtoken"
+import { sendEmail } from "../utilis/gmail.js"
+import { generateOtp } from "../utilis/otp.js"
 const connection = await connectDatabase()
 const getAgencyDetials = asyncHandler(async(req,res)=>{
     try{
@@ -142,4 +144,34 @@ const addavatar = asyncHandler(async(req,res)=>{
         new ApiResponse(201,'Avatar Uploaded')
     )
 })
-export {getAgencyDetials,showAgencyDetails,addCoverImage,addavatar}
+const isagencyUser = asyncHandler(async(req,res)=>{
+    const token = req.cookies?.AgencyToken || req.header("Authorization")?.replace("Bearer ","")
+    if(!token){
+        throw new ApiError(402,'No agencyToken')
+    }
+    const decoded_token = decodeAgencyToken(token)
+    const id= decoded_token._id
+    const fetchEmailString =`select email from adoption_agency where user_id =${id}`
+    const inputEmail=req.body?.email || null
+    console.log('Input Email',inputEmail)
+    const fetchEmail = await connection.execute(fetchEmailString)
+    console.log('fecth Email',fetchEmail.rows[0][0])
+    if(fetchEmail.rows.length==0){
+        throw new ApiError(402,'Email not found in database')
+    }
+    if(inputEmail!==fetchEmail.rows[0][0]){
+        throw new ApiError(404,'Invalid Email,not matched with Database')
+    }
+    let otp = generateOtp()
+    const result = await sendEmail(inputEmail,otp)
+    /*if(!result){
+        throw new ApiError(401,'Otp not mailed')
+    }*/
+    res.status(200).json(
+        new ApiResponse(201,'OTP sent')
+    )
+
+})
+export {getAgencyDetials,showAgencyDetails,addCoverImage,addavatar,
+        isagencyUser
+}

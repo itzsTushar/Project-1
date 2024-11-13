@@ -76,7 +76,7 @@ const registerUser = asyncHandler(async(req,res)=>{
     else{
         throw new ApiError(404,'Something went wrong while inserting the data')
     }
-    res.status(200).cookie("Refresh Token",refreshToken,option)
+    res.status(200).cookie("signRefreshToken",refreshToken,option)
     .json(
         new ApiResponse(200,{username,email},'User Register Succesfully')
     )
