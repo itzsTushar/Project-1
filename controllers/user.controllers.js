@@ -21,7 +21,7 @@ const registerUser = asyncHandler(async(req,res)=>{
     })){
         throw new ApiError(400,"All fileds are required")
     }
-    let avatar = null
+    let avatar = null   
     if(avatar_path){
        const avatarUrl = await uploadonCloudinary(avatar_path)
        avatar = avatarUrl.url
