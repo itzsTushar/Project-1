@@ -44,11 +44,6 @@
             </div>
 
             <!-- Photo -->
-            <div class="mb-4">
-                <label for="photo" class="block text-gray-700 font-medium mb-2">Photo:</label>
-                <input type="file" id="photo" name="photo" accept="image/*" required
-                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300">
-            </div>
 
             <!-- Status -->
             <div class="mb-4">
@@ -90,41 +85,42 @@
     </div>
 
     <script>
-        document.getElementById('submitButton').addEventListener('click', async (e) => {
+        document.getElementById('submitButton').addEventListener('click', async () => {
             const form = document.getElementById('childForm');
             const formData = new FormData(form);
-            console.log(formData)
-            // Get status values as array
+        
+            // Get status values as an array and join them
             const statuses = Array.from(document.querySelectorAll('input[name="status"]:checked')).map(checkbox => checkbox.value);
             formData.set('status', statuses.join(', '));
-            const file = e.target.files ? e.target.files : null;
-
-            if (!file) {
-                console.log("No file selected");
-                return;
-            }
-    
-            //const formData = new FormData();
-            formData.append('photo', file[0]);
-
+        
+            // Convert FormData to a plain object
+            const formObject = Object.fromEntries(formData.entries());
+            
             try {
                 const response = await fetch('/child/childform', {
                     method: 'POST',
-                    body: formData,
+                    headers: {
+                        'Content-Type': 'application/json', // Ensure JSON format
+                    },
+                    body: JSON.stringify(formObject), // Convert form data to JSON
+                    credentials: 'include',
                 });
-
+        
+                console.log(response);
                 if (!response.ok) {
                     throw new Error('Failed to submit form');
                 }
-
+        
                 const result = await response.json();
-                alert(result.message || 'Form submitted successfully!');
-                window.href.location = 'agencyDetails.html';
+                console.log(result.message || 'Form submitted successfully!');
+                window.location.href = 'agencyDetails.html';
             } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('An error occurred while submitting the form. Please try again.');
+                console.log('Error submitting form:', error);
+                console.log('An error occurred while submitting the form. Please try again.');
             }
         });
+        
+        
     </script>
 </body>
 </html>
