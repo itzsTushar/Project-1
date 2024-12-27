@@ -80,4 +80,40 @@ const getChildDetails = asyncHandler(async (req, res) => {
     }
 });
 */
+
+/*async function fetchChildren() {
+        try {
+            const response = await fetch('/getChildren', {
+                method: 'GET',
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch children');
+            }
+
+            const children = await response.json();
+            const childrenContainer = document.getElementById('childrenContainer');
+            childrenContainer.innerHTML = ''; // Clear existing cards
+
+            children.forEach((child) => {
+                const childCard = `
+                    <div class="bg-white p-4 rounded-lg shadow-md flex flex-col items-center transform transition-transform duration-300 hover:scale-105">
+                        <div class="w-48 h-48 bg-gray-200 rounded-lg overflow-hidden">
+                            <img src="${child.photo || 'default_child_photo.jpg'}" alt="${child.name}" class="w-full h-full object-cover">
+                        </div>
+                        <h2 class="mt-4 text-lg font-semibold text-gray-800">${child.name}</h2>
+                        <p class="text-gray-600">Status: ${child.status}</p>
+                        <p class="text-gray-600">Age: ${child.age}</p>
+                        <label class="mt-4 block">
+                            <input type="file" class="hidden">
+                            <span class="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer">Upload Photo</span>
+                        </label>
+                    </div>
+                `;
+                childrenContainer.innerHTML += childCard; // Append the new card
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }*/
 export {getChildDetails}

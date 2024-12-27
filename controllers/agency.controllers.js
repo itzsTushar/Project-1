@@ -172,6 +172,41 @@ const isagencyUser = asyncHandler(async(req,res)=>{
     )
 
 })
+const showChildren = asyncHandler(async(req,res)=>{
+    try{
+        const token = req.cookies?.AgencyToken || req.header("Authorization")?.replace("Bearer","");
+        console.log(token);
+        if(!token) throw new ApiError(400,"Unauthorised request");
+        const user_id = decodeAgencyToken(token)._id;
+        console.log(user_id);
+        const agency_id = await connection.execute(`select agency_id from adoption_agency where user_id=${user_id}`);
+        console.log(agency_id.rows[0]);
+        const children_detail = await connection.execute(`select cname,(sysdate-cdob)/365,status,photo from child where agency_id=${agency_id.rows[0]}`);
+        let n = children_detail.rows.length;
+        console.log(n)
+        const childArray = [];
+        for(let i=0;i<n ; i++){
+            childArray.push(children_detail.rows[i]);
+        }
+        const transformedArray = childArray.map(([name, age, status, photo]) => ({
+            name,
+            age,
+            status,
+            photo,
+          }));
+          
+        console.log(transformedArray);
+        console.log(childArray);
+        //console.log(children_detail);
+       // console.log(all_child);
+        res.status(200).json(
+            new ApiResponse(200,transformedArray,"Sucessful")
+        );
+
+    }catch(err){
+        throw new ApiError(401,err)
+    }
+})
 export {getAgencyDetials,showAgencyDetails,addCoverImage,addavatar,
-        isagencyUser
+        isagencyUser,showChildren
 }

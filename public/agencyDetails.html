@@ -7,12 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    
-    <!-- Cover Image Section -->
+    <!-- Existing Cover Image and Profile Sections -->
     <div class="relative">
-        <!-- Cover Image -->
         <img id="cimage" src="" alt="Cover Image" class="w-full h-52 object-cover">
-        <!-- Camera Icon for Changing Cover Image -->
         <button id="changeCoverBtn" class="absolute top-4 right-4 bg-gray-900 text-white p-2 rounded-full hover:bg-gray-700">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10l1.5-1.5a3 3 0 014.243 0L12 12l2.257-2.257a3 3 0 014.243 0L20 10M3 20h18M5 20a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v11a2 2 0 01-2 2h-4" />
@@ -21,12 +18,9 @@
         <input name="cimage" type="file" id="uploadCoverInput" class="hidden" accept="image/*">
     </div>
 
-    <!-- Profile Image and Details -->
-    <div class="flex">
-        <!-- Profile Image (Avatar) -->
-        <div class="relative -mt-16 ml-12">
+    <div class="flex mt-6 px-6">
+        <div class="relative -mt-16">
             <img id="avatar" src="" alt="Profile Image" class="w-32 h-32 object-cover rounded-full border-4 border-white shadow-lg">
-            <!-- Camera Icon for Changing Profile Image -->
             <button id="changeAvatarBtn" class="absolute bottom-0 right-0 bg-gray-900 text-white p-2 rounded-full hover:bg-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10l1.5-1.5a3 3 0 014.243 0L12 12l2.257-2.257a3 3 0 014.243 0L20 10M3 20h18M5 20a2 2 0 01-2-2V7a2 2 0 012-2h14a2 2 0 012 2v11a2 2 0 01-2 2h-4" />
@@ -34,18 +28,24 @@
             </button>
             <input name="avatar" type="file" id="uploadAvatarInput" class="hidden" accept="image/*">
         </div>
-        
-        <!-- User Details -->
-        <div class="ml-8 mt-8 space-y-2">
-            <div id="agencyName" class="text-xl font-semibold text-gray-800"></div>
-            <div id="address" class="text-gray-600"></div>
-            <div id="email" class="text-gray-600"></div>
-            <div id="phone" class="text-gray-600"></div>
+        <div class="ml-8 mt-8">
+            <h1 id="agencyName" class="text-2xl font-semibold text-gray-800"></h1>
+            <p id="address" class="text-gray-600"></p>
+            <p id="email" class="text-gray-600"></p>
+            <p id="phone" class="text-gray-600"></p>
             <a id="wlink" class="text-blue-500 hover:underline" target="_blank">Website</a>
         </div>
     </div>
-    <button onclick="window.location.href='childinput.html'">Add Childeren</button>
-
+        <!-- Existing Cover Image and Profile Sections -->
+    
+        <!-- Add this container for children cards -->
+        <div id="childrenContainer" class="mt-8 px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <!-- Child cards will be dynamically inserted here -->
+        </div>
+    
+        <button onclick="window.location.href='childinput.html'" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+            Add Children
+        </button>
 
 </body>
 <script>
@@ -74,7 +74,7 @@
             console.error(err);
         }
     }
-    window.onload = fetchAgencyDetails;
+
 
    // Trigger file input click for cover image
    document.getElementById('changeCoverBtn').addEventListener('click', () => {
@@ -157,7 +157,45 @@ if (uploadAvatarInput) {
 } else {
     console.error("File input element with ID 'uploadAvatarInput' not found.");
 }
+async function fetchChildren() {
+    try {
+        const response = await fetch('/getChildren', {
+            method: 'GET',
+            credentials: 'include',
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch children');
+        }
 
-    
+        const children = await response.json();
+        console.log(children)
+        const childrenContainer = document.getElementById('childrenContainer');
+        childrenContainer.innerHTML = ''; // Clear existing cards
+
+        children.data.forEach((child) => {
+            const childCard = `
+                <div class="bg-white p-4 rounded-lg shadow-md flex flex-col items-center transform transition-transform duration-300 hover:scale-105">
+                    <div class="w-48 h-48 bg-gray-200 rounded-lg overflow-hidden">
+                        <img src="${child.photo || 'default_child_photo.jpg'}" alt="${child.name}" class="w-full h-full object-cover">
+                    </div>
+                    <h2 class="mt-4 text-lg font-semibold text-gray-800">${child.name}</h2>
+                    <p class="text-gray-600">Status: ${child.status}</p>
+                    <p class="text-gray-600">Age: ${child.age}</p>
+                    <label class="mt-4 block">
+                        <input type="file" class="hidden">
+                        <span class="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer">Upload Photo</span>
+                    </label>
+                </div>
+            `;
+            childrenContainer.innerHTML += childCard; // Append the new card
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+window.onload = () => {
+    fetchAgencyDetails();
+    fetchChildren();
+};
 </script>
 </html>
