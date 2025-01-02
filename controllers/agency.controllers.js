@@ -164,6 +164,10 @@ const isagencyUser = asyncHandler(async(req,res)=>{
     }
     let otp = generateOtp()
     const result = await sendEmail(inputEmail,otp)
+    const agencyIdRes = await connection.execute(`select agency_id from adoption_agency where user_id=${id}`)
+    const agency_id=agencyIdRes.rows[0]
+    const otpDb = await connection.execute(`insert into agency_otp values(${agency_id},${otp},sysdate,sysdate + interval '15' minute)`)
+    await connection.commit()
     /*if(!result){
         throw new ApiError(401,'Otp not mailed')
     }*/
@@ -172,6 +176,81 @@ const isagencyUser = asyncHandler(async(req,res)=>{
     )
 
 })
+/*
+const validateOTP = asyncHandler(async(req,res)=>{
+try {
+        const {enteredOTP} = req.body
+        console.log(req.body)
+        console.log("eneteredOTP:",enteredOTP)
+        const token  = req.cookies?.AgencyToken || req.header("Authorization").replace("Bearer","")
+        const userId = decodeAgencyToken(token)._id
+        const agnecyRes = await connection.execute(`select agency_id from adoption_agency where user_id=${userId}`)
+        const agnecyId = agnecyRes.rows[0]
+        const otpRes= await connection.execute(`select otp from agency_otp where agency_id=${agnecyId} and sysdate between otp_start_time and otp_end_time`)
+        if(otpRes.rows.length==0) throw new ApiError(401,"Otp Not generated")
+        const generateOTP = otpRes.rows[0]
+        console.log("generated OTP:",generateOTP[0])
+        let a = generateOtp[0]
+        a = toString(a)
+        let b = enteredOTP.toString()
+        console.log(typeof(a),typeof(b))
+        if(a === b) {
+        res.status(200).json(
+            new ApiResponse(201,"Otp SuccessFully matche"))
+        } else{
+            throw new ApiError(401,`OTP didn't match`)
+        }
+} catch (error) {
+    console.log("Something went wrong",error)
+}
+
+})*/
+const validateOTP = asyncHandler(async (req, res) => {
+    try {
+      const { enteredOTP } = req.body;
+      console.log("Request Body:", req.body);
+      console.log("Entered OTP:", enteredOTP);
+  
+      // Extract token from cookies or headers
+      const token = req.cookies?.AgencyToken || req.header("Authorization")?.replace("Bearer ", "");
+      if (!token) throw new ApiError(401, "Authorization token missing");
+  
+      const userId = decodeAgencyToken(token)._id;
+  
+      // Query to get agency_id
+      const agencyRes = await connection.execute(`SELECT agency_id FROM adoption_agency WHERE user_id=${userId}`);
+      if (agencyRes.rows.length === 0) throw new ApiError(404, "Agency not found");
+  
+      const agencyId = agencyRes.rows[0][0];
+  
+      // Query to get OTP
+      const otpRes = await connection.execute(`
+        SELECT otp 
+        FROM agency_otp 
+        WHERE agency_id=${agencyId} 
+          AND SYSDATE BETWEEN otp_start_time AND otp_end_time
+      `);
+      if (otpRes.rows.length === 0) throw new ApiError(401, "OTP not generated or expired");
+  
+      const generatedOTP = otpRes.rows[0][0];
+      console.log("Generated OTP:", generatedOTP);
+  
+      // Ensure both values are strings and trim any extra spaces
+      const generatedOtpStr = generatedOTP.toString().trim();
+      const enteredOtpStr = enteredOTP.toString().trim();
+  
+      // Compare the OTPs
+      if (generatedOtpStr === enteredOtpStr) {
+        return res.status(200).json(new ApiResponse(201, "OTP successfully matched"));
+      } else {
+        throw new ApiError(401, "OTP didn't match");
+      }
+    } catch (error) {
+      console.error("Something went wrong:", error.message);
+      res.status(error.statusCode || 500).json({ message: error.message || "Internal Server Error" });
+    }
+  });
+  
 const showChildren = asyncHandler(async(req,res)=>{
     try{
         const token = req.cookies?.AgencyToken || req.header("Authorization")?.replace("Bearer","");
@@ -208,5 +287,5 @@ const showChildren = asyncHandler(async(req,res)=>{
     }
 })
 export {getAgencyDetials,showAgencyDetails,addCoverImage,addavatar,
-        isagencyUser,showChildren
+        isagencyUser,showChildren,validateOTP
 }
