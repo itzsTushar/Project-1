@@ -164,5 +164,38 @@ const logoutUser = asyncHandler(async(req,res)=>{
     new ApiResponse(200,"USer logged out")
  )
 })
+const recommendedchild = asyncHandler(async(req,res)=>{
+try {
+        const children = await connection.execute(`select child_id from child`)
+        if(children.rows.length==0) throw new ApiError(404,'No child in database')
+        let len = children.rows.length
+        let ids = []
+        for(let i=0; i< len ; i++){
+            ids.push(children.rows[i])
+        }
+        const childrenArray = []
+        for(let  i=0; i<15;i++){
+            let index = Math.floor(Math.random()*(len-1))
+            const childDetails = await connection.excute(`select cname,(sysdate-cdob)/365,status,photo from child where child_id=${ids[index]}`)
+            let n = childDetails.rows.length
+            for(let j=0;j<n;j++){
+                childrenArray.push(childDetails.rows[j])
+            }
+            childrenArray.push(childDetails.rows[j])
+        } 
+        const transformedArray = childrenArray.map(([name, age, status, photo]) => ({
+            name,
+            age,
+            status,
+            photo,
+          }));
+          res.status(200).json(
+            new ApiResponse(200,transformedArray,"Recommended Children")
+        );
+} catch (error) {
+    console.log("Something wetn wrong->",error)
+}
+    
+})
 //await connection.close()
-export {registerUser,loginUser,getAccountDetail,logoutUser}
+export {registerUser,loginUser,getAccountDetail,logoutUser,recommendedchild}
