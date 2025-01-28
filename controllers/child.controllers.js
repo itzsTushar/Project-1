@@ -38,5 +38,28 @@ try {
     throw new ApiError(400,error)
 }
 });
-
-export {getChildDetails}
+const recommendRandomChildren = asyncHandler(async(req,res)=>{
+try{
+    const fetchChildString = `select cname,(sysdate-cdob)/365,status,photo from child where rownum<=20`
+    const children_detail = await connection.execute(fetchChildString)
+    let len = children_detail.rows.length;
+    if (len==0) throw new ApiError(401,'No Data Available')
+    const childArray = [];
+    for(let i=0;i<n ; i++){
+        childArray.push(children_detail.rows[i]);
+    }
+    const transformedArray = childArray.map(([name, age, status, photo]) => ({
+        name,
+        age,
+        status,
+        photo,
+      }))
+      console.log(transformedArray)
+      res.status(200).json(
+        new ApiResponse(200,transformedArray,"Sucessful")
+    )
+}catch(err){
+    console.log('Something Went Wrong ->>',err)
+}
+})
+export {getChildDetails,recommendRandomChildren}

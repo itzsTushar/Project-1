@@ -227,7 +227,7 @@ function showSlides() {
 }
 async function recommendedChildren (){
   try{
-    const response = await fecth('/recomendation',{
+    const response = await fetch('/recomendation',{
       method : 'GET',
       credential : 'include'
     });
@@ -236,7 +236,7 @@ async function recommendedChildren (){
     }
     const recomendation = await response.json()
     const recommedationContainer = document.getElementById('recommendationContainer');
-    recomendationContainer.innerHTML =''
+    recommendationContainer.innerHTML =''
     recomendation.data.forEach((child)=>{
       const childCard = `
       <div class="bg-white p-4 rounded-lg shadow-md flex flex-col items-center transform transition-transform duration-300 hover:scale-105">
@@ -248,12 +248,14 @@ async function recommendedChildren (){
           <p class="text-gray-600">Age: ${child.age}</p>
       </div>
   `;
-  childrenContainer.innerHTML += childCard;
+  recommedationContainer.innerHTML += childCard;
     })
   }catch(err){
     console.log("Something went wrong -> ",err)
   }
 }
-
+window.onload=()=>{
+  recommendedChildren()
+}
 </script>
 </html>
